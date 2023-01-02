@@ -10,7 +10,7 @@ if __name__ == "__main__":
     env = make_vec_env_mario('SuperMarioBros-Nes', n_envs=4)  # Makes 4 environments to use with PPO
     env = VecFrameStack(env, n_stack=4)  # Inputs 4 frames instead of 1 to give context to NN
 
-    model = PPO2.load("ppo2_mario")
+    model = PPO3.load("ppo2_mario")
     # Stop training when the model reaches the reward threshold
     # callback_on_best = StopTrainingOnRewardThreshold(reward_threshold=-100, verbose=1)
     # eval_callback = EvalCallback(env, callback_on_new_best=callback_on_best, verbose=1)
