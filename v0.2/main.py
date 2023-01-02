@@ -20,7 +20,8 @@ if __name__ == "__main__":
     #              cliprange=0.05, tensorboard_log="./a2c_cartpole_tensorboard/")
     # model = PPO3(CnnPolicy, env, verbose=1, learning_rate=0.0005, n_steps=512, nminibatches=2, noptepochs=11,
     #              cliprange=0.1, tensorboard_log="./a2c_cartpole_tensorboard/")
-    model.learn(total_timesteps=1000000, env=env)
+    model.set_env(env)
+    model.learn(total_timesteps=1000000)
     #
     model.save("ppo2_mario")
 
