@@ -24,3 +24,4 @@ to
     
     layer_3 = activ(conv(layer_2, 'c3', n_filters=32, filter_size=2, stride=1, init_scale=np.sqrt(2), **kwargs))
     
+Can change the network architecture to something else, but make sure that there are enough dimensions for whatever architecture you choose
