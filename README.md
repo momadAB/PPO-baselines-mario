@@ -1,6 +1,10 @@
 # PPO-baselines-mario
-SuperMarioBros Nes CNN using PPO from stable-baselines.
+SuperMarioBros Nes CNN using PPO from stable-baselines. Changes input shape from 240,256,3 to 14,14,4.
 Uses some utility functions from Chrispresso @GitHub.
+
+Example of the trained NN completing the first level.
+![PPOmariofinishinglevel](https://user-images.githubusercontent.com/97381129/210824973-8d004373-48d2-4e23-a10e-d9a9a8f5e1a3.gif)
+
 
 Check requirements.txt.
 
@@ -35,3 +39,5 @@ Later changed to:
     # layer_3 = conv_to_fc(layer_3)
     layer_3 = conv_to_fc(layer_2)
     return activ(linear(layer_3, 'fc1', n_hidden=512, init_scale=np.sqrt(2)))
+
+The input is only 14,14,4 so a complex model is not needed, and even this is likely more complex than is needed.
