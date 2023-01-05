@@ -37,6 +37,10 @@ class EnemyType(Enum):
     Spiny_Egg = 0x12
     Fly_Cheep_Cheep = 0x14
     Bowser_Flame2 = 0x15
+    Fireworks = 0x16
+    Bullet_Bill_Frenzy = 0x17
+    Stop_Frenzy = 0x18
+    StarFlag_Object = 0x31
 
     Generic_Enemy = 0xFF
 
@@ -432,6 +436,8 @@ class DummyVecEnvMario(VecEnv):
         self.buf_infos = [{} for _ in range(self.num_envs)]
         self.actions = None
         self.metadata = env.metadata
+        self.frames_since_max_x_change = np.zeros((self.num_envs,), dtype=np.float32)
+        self.max_x_change = np.zeros((self.num_envs,), dtype=np.float32)
 
     def step_async(self, actions):
         self.actions = actions
@@ -440,10 +446,29 @@ class DummyVecEnvMario(VecEnv):
         for env_idx in range(self.num_envs):
             obs, self.buf_rews[env_idx], self.buf_dones[env_idx], self.buf_infos[env_idx] = \
                 self.envs[env_idx].step(self.actions[env_idx])
+
+            # Added section
             ram = self.envs[env_idx].get_ram()
             obs = get_input_array(ram)
+            mario_x = SMB.get_mario_location_in_level(ram)[0]
+            if mario_x > self.max_x_change[env_idx]:
+                self.max_x_change[env_idx] = mario_x
+                self.frames_since_max_x_change[env_idx] = 0
+            else:
+                self.frames_since_max_x_change[env_idx] += 1
+            if self.frames_since_max_x_change[env_idx] > 250:
+                self.buf_dones[env_idx] = True
+            player_state = ram[0x000E]  # Check if dead
+            player_float_state = ram[0x001D]  # Check if finished level
+            if player_state == 0x06 or player_state == 0x0B:
+                self.buf_dones[env_idx] = True
+            if player_float_state == 0x03:  # Is Mario on flag?
+                self.buf_dones[env_idx] = True
+
             if self.buf_dones[env_idx]:
                 # save final observation where user can get it, then reset
+                self.max_x_change[env_idx] = 0
+                self.frames_since_max_x_change[env_idx] = 0
                 self.buf_infos[env_idx]['terminal_observation'] = obs
                 obs = self.envs[env_idx].reset()
                 ram = self.envs[env_idx].get_ram()
