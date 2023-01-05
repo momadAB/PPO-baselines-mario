@@ -1,6 +1,6 @@
 # PPO-baselines-mario
 SuperMarioBros Nes CNN using PPO from stable-baselines. Changes input shape from 240,256,3 to 14,14,4.
-Uses some utility functions from Chrispresso @GitHub.
+Uses some utility functions from Chrispresso @GitHub: https://github.com/Chrispresso/SuperMarioBros-AI.
 
 Example of the trained NN completing the first level.
 
