@@ -3,6 +3,7 @@ SuperMarioBros Nes CNN using PPO from stable-baselines. Changes input shape from
 Uses some utility functions from Chrispresso @GitHub.
 
 Example of the trained NN completing the first level.
+
 ![PPOmariofinishinglevel](https://user-images.githubusercontent.com/97381129/210824973-8d004373-48d2-4e23-a10e-d9a9a8f5e1a3.gif)
 
 
